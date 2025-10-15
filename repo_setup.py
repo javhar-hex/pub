@@ -19,6 +19,7 @@ def get_token():
         raise KeyError("Error: GitHub PAT secret not found. Check the Secrets sidebar (key icon)!")
 
 if __name__ == "__main__":
+    print("hee kijk nou! pub repo_setup.py")
     print(f"dist version  : {installed_dist_version()}")
     print(f"target version: {TARGET_VERSION} (set 'target_version')")
     print(f"force install?  {FORCE_INSTALL} (set 'force_install')")
