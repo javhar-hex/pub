@@ -8,6 +8,7 @@ def installed_dist_version():
         return None
 
 def get_token(github_pat: str):
+    print("get token ABC")
     from google.colab import userdata
     try:
         return userdata.get(github_pat)
