@@ -51,11 +51,36 @@ def install(
     import importlib; importlib.invalidate_caches()
     print("dist version is now ", installed_dist_version(dist_name))
 
-if __name__ == "__main__":
-    print(f"DEBUG: Globals keys available in script: {sorted([k for k in globals().keys() if not k.startswith('_') and k not in ['os', 'dist_version', 'PackageNotFoundError', 'installed_dist_version', 'get_token', 'install']])}")
+def parse_args(args):
+    # Setup default values
+    params = {
+        "target_version": "0.1.24",
+        "force_install": False,
+        "github_pat": None,
+        "dist_name": "javhar"
+    }
 
-    target_version = globals().get("target_version", "0.1.24")
-    force_install = globals().get("force_install", False)
-    github_pat = globals().get("github_pat", None)
-    dist_name = globals().get("dist_name", "javhar")
+    # Iterate through command-line arguments (after script name at index 0)
+    for arg in args[1:]:
+        if arg.startswith("--target-version="):
+            params["target_version"] = arg.split("=")[1]
+        elif arg.startswith("--force-install="):
+            # Convert string argument to boolean
+            params["force_install"] = arg.split("=")[1].lower() == 'true'
+        elif arg.startswith("--github-pat="):
+            params["github_pat"] = arg.split("=")[1]
+        elif arg.startswith("--dist-name="):
+            params["dist_name"] = arg.split("=")[1]
+    return params
+    
+if __name__ == "__main__":
+    params = parse_args(sys.argv)
+    print("params", params)
+    
+    # Unpack parameters for readability and function call
+    target_version = params["target_version"]
+    force_install = params["force_install"]
+    github_pat_secret_name = params["github_pat"]
+    dist_name = params["dist_name"]
+    
     install(github_pat, target_version, force_install, dist_name)
