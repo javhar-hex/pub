@@ -1,6 +1,5 @@
 import os
 from importlib.metadata import version as dist_version, PackageNotFoundError
-from typing import Optional
 
 def installed_dist_version():
     try:
@@ -17,7 +16,7 @@ def get_token(github_pat: str):
         raise KeyError("Error: GitHub PAT secret not found. Check the Secrets sidebar (key icon)!")
 
 def install(
-    github_pat: Optional[str], 
+    github_pat: str, 
     target_version: str,
     force_install: bool,
     dist_name: str,
