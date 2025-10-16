@@ -52,7 +52,8 @@ def install(
     print("dist version is now ", installed_dist_version(dist_name))
 
 if __name__ == "__main__":
-    print("heekijknou. repo setup main + globals.")
+    print(f"DEBUG: Globals keys available in script: {sorted([k for k in globals().keys() if not k.startswith('_') and k not in ['os', 'dist_version', 'PackageNotFoundError', 'installed_dist_version', 'get_token', 'install']])}")
+
     target_version = globals().get("target_version", "0.1.24")
     force_install = globals().get("force_install", False)
     github_pat = globals().get("github_pat", None)
