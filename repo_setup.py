@@ -63,6 +63,7 @@ def parse_args(args):
 
     # Iterate through command-line arguments (after script name at index 0)
     for arg in args[1:]:
+        print("parse arg ", arg)
         if arg.startswith("--target-version="):
             params["target_version"] = arg.split("=")[1]
         elif arg.startswith("--force-install="):
@@ -75,6 +76,7 @@ def parse_args(args):
     return params
     
 if __name__ == "__main__":
+    print("argv ", sys.argv)
     params = parse_args(sys.argv)
     print("params", params)
     
