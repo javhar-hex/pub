@@ -22,7 +22,7 @@ def install(
     dist_name: str,
 ) -> None:
     print("hee kijk nou! pub repo_setup.py install")
-    print(f"dist version  : {installed_dist_version()}")
+    print(f"dist version  : {installed_dist_version(dist_name)}")
     print(f"target version: {target_version}")
     print(f"force install?  {force_install}")
     
@@ -30,7 +30,7 @@ def install(
         print("No action taken: No GitHub PAT name supplied. Please set a github_pat.")
         return
 
-    if installed_dist_version() == target_version and not force_install:
+    if installed_dist_version(dist_name) == target_version and not force_install:
         print("nothing to do.")
         return
 
@@ -49,7 +49,7 @@ def install(
     # !git clone {repo_url} /content/my_repo
     
     import importlib; importlib.invalidate_caches()
-    print("dist version is now ", installed_dist_version())
+    print("dist version is now ", installed_dist_version(dist_name))
 
 if __name__ == "__main__":
     print("heekijknou. repo setup main + globals.")
