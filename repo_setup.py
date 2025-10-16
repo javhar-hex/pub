@@ -9,7 +9,6 @@ def installed_dist_version(dist_name: str) -> str:
         return None
 
 def get_token(github_pat_secret: str) -> str:
-    print("get token A12")
     from google.colab import userdata
     try:
         return userdata.get(github_pat_secret)
@@ -22,7 +21,6 @@ def install(
     force_install: bool,
     dist_name: str,
 ) -> None:
-    print("hee kijk nou! pub repo_setup.py install")
     print(f"dist version  : {installed_dist_version(dist_name)}")
     print(f"target version: {target_version}")
     print(f"force install?  {force_install}")
@@ -32,7 +30,7 @@ def install(
         return
 
     if installed_dist_version(dist_name) == target_version and not force_install:
-        print("nothing to do.")
+        print("Nothing to do.")
         return
 
     token = get_token(github_pat_secret)
@@ -50,10 +48,9 @@ def install(
     # !git clone {repo_url} /content/my_repo
     
     import importlib; importlib.invalidate_caches()
-    print("dist version is now ", installed_dist_version(dist_name))
+    print(f"dist version now: {installed_dist_version(dist_name)}")
 
 def parse_args(args) -> dict[str, str]:
-    # Setup default values
     params = {
         "target_version": "0.1.24",
         "force_install": False,
@@ -61,9 +58,7 @@ def parse_args(args) -> dict[str, str]:
         "dist_name": "javhar"
     }
 
-    # Iterate through command-line arguments (after script name at index 0)
     for arg in args[1:]:
-        print("parse arg ", arg)
         if arg.startswith("--target-version="):
             params["target_version"] = arg.split("=")[1]
         elif arg.startswith("--force-install="):
@@ -73,14 +68,12 @@ def parse_args(args) -> dict[str, str]:
             params["github_pat_secret"] = arg.split("=")[1]
         elif arg.startswith("--dist-name="):
             params["dist_name"] = arg.split("=")[1]
+
     return params
     
 if __name__ == "__main__":
-    print("argv ", sys.argv)
     params = parse_args(sys.argv)
-    print("params", params)
     
-    # Unpack parameters for readability and function call
     target_version = params["target_version"]
     force_install = params["force_install"]
     github_pat_secret = params["github_pat_secret"]
