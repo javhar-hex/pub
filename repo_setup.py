@@ -45,3 +45,6 @@ def install(
         print("dist version is now ", installed_dist_version())
     else:
         print("nothing to do.")
+
+if __name__ == "__main__":
+    print("heekijknou. repo setup main.")
