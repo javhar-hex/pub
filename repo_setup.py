@@ -8,16 +8,16 @@ def installed_dist_version(dist_name: str) -> str:
     except PackageNotFoundError:
         return None
 
-def get_token(github_pat: str) -> str:
+def get_token(github_pat_secret: str) -> str:
     print("get token A12")
     from google.colab import userdata
     try:
-        return userdata.get(github_pat)
+        return userdata.get(github_pat_secret)
     except KeyError:
         raise KeyError("Error: GitHub PAT secret not found. Check the Secrets sidebar (key icon)!")
 
 def install(
-    github_pat: str, 
+    github_pat_secret: str, 
     target_version: str,
     force_install: bool,
     dist_name: str,
@@ -27,15 +27,15 @@ def install(
     print(f"target version: {target_version}")
     print(f"force install?  {force_install}")
     
-    if github_pat is None:
-        print("No action taken: No GitHub PAT name supplied. Please set a github_pat.")
+    if github_pat_secret is None:
+        print("No action taken: No GitHub PAT secret name supplied.")
         return
 
     if installed_dist_version(dist_name) == target_version and not force_install:
         print("nothing to do.")
         return
 
-    token = get_token(github_pat)
+    token = get_token(github_pat_secret)
     url = f"git+https://x-access-token:{token}@github.com/javhar-hex/hex.git@main"
     install_command = (
         f"pip install -q "
@@ -52,12 +52,12 @@ def install(
     import importlib; importlib.invalidate_caches()
     print("dist version is now ", installed_dist_version(dist_name))
 
-def parse_args(args):
+def parse_args(args) -> dict[str, str]:
     # Setup default values
     params = {
         "target_version": "0.1.24",
         "force_install": False,
-        "github_pat": None,
+        "github_pat_secret": None,
         "dist_name": "javhar"
     }
 
@@ -69,8 +69,8 @@ def parse_args(args):
         elif arg.startswith("--force-install="):
             # Convert string argument to boolean
             params["force_install"] = arg.split("=")[1].lower() == 'true'
-        elif arg.startswith("--github-pat="):
-            params["github_pat"] = arg.split("=")[1]
+        elif arg.startswith("--github-pat-secret="):
+            params["github_pat_secret"] = arg.split("=")[1]
         elif arg.startswith("--dist-name="):
             params["dist_name"] = arg.split("=")[1]
     return params
@@ -83,7 +83,7 @@ if __name__ == "__main__":
     # Unpack parameters for readability and function call
     target_version = params["target_version"]
     force_install = params["force_install"]
-    github_pat_secret_name = params["github_pat"]
+    github_pat_secret = params["github_pat_secret"]
     dist_name = params["dist_name"]
     
-    install(github_pat, target_version, force_install, dist_name)
+    install(github_pat_secret, target_version, force_install, dist_name)
