@@ -1,14 +1,14 @@
 import os
 from importlib.metadata import version as dist_version, PackageNotFoundError
 
-def installed_dist_version():
+def installed_dist_version(dist_name: str) -> str:
     try:
-        return dist_version(DIST_NAME)
+        return dist_version(dist_name)
     except PackageNotFoundError:
         return None
 
-def get_token(github_pat: str):
-    print("get token ABC")
+def get_token(github_pat: str) -> str:
+    print("get token A12")
     from google.colab import userdata
     try:
         return userdata.get(github_pat)
@@ -20,7 +20,7 @@ def install(
     target_version: str,
     force_install: bool,
     dist_name: str,
-):
+) -> None:
     print("hee kijk nou! pub repo_setup.py install")
     print(f"dist version  : {installed_dist_version()}")
     print(f"target version: {target_version}")
