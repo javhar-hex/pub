@@ -1,5 +1,6 @@
 import os
 from importlib.metadata import version as dist_version, PackageNotFoundError
+from typing import Optional
 
 def installed_dist_version():
     try:
