@@ -1,4 +1,5 @@
 import os
+import sys
 from importlib.metadata import version as dist_version, PackageNotFoundError
 
 def installed_dist_version(dist_name: str) -> str:
