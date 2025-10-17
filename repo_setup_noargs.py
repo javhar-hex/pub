@@ -44,4 +44,4 @@ def install(
     print(f"dist version now: {installed_dist_version(dist_name)}")
 
 if __name__ == "__main__":
-    print("hee kijk nou.")
+    pass
