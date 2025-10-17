@@ -15,8 +15,8 @@ def installed_dist_version(dist_name: str) -> str:
 def install(
     github_pat: str, 
     target_version: str,
-    force_install: bool,
-    dist_name: str,
+    force_install: bool = False,
+    dist_name: str = "javhar",
 ) -> None:
     print(f"dist version  : {installed_dist_version(dist_name)}")
     print(f"target version: {target_version}")
@@ -43,33 +43,5 @@ def install(
     import importlib; importlib.invalidate_caches()
     print(f"dist version now: {installed_dist_version(dist_name)}")
 
-def parse_args(args) -> dict[str, str]:
-    params = {
-        "target_version": "0.1.24",
-        "force_install": False,
-        "github_pat": None,
-        "dist_name": "javhar"
-    }
-
-    for arg in args[1:]:
-        if arg.startswith("--target-version="):
-            params["target_version"] = arg.split("=")[1]
-        elif arg.startswith("--force-install="):
-            # Convert string argument to boolean
-            params["force_install"] = arg.split("=")[1].lower() == 'true'
-        elif arg.startswith("--github-pat="):
-            params["github_pat"] = arg.split("=")[1]
-        elif arg.startswith("--dist-name="):
-            params["dist_name"] = arg.split("=")[1]
-
-    return params
-    
 if __name__ == "__main__":
     print("hee kijk nou.")
-    params = parse_args(sys.argv)
-    
-    target_version = params["target_version"]
-    force_install = params["force_install"]
-    github_pat = params["github_pat"]
-    dist_name = params["dist_name"]
-    
