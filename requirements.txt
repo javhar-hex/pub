@@ -1,0 +1,7 @@
+pytest>=8.0
+pytest-cov>=5.0
+pre-commit>=3.7
+black>=24.8.0
+ruff>=0.6.7
+ipykernel>=6.29
+grimp>=3.10
