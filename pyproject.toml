@@ -1,0 +1,58 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "javhar"
+version = "0.1.29"
+requires-python = ">=3.10"
+dependencies = [
+  "immutables>=0.19,<1.0",
+  "numpy>=1.26",
+  "pandas>=2.2",
+  "requests>=2.32", 
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8",
+  "pytest-cov",
+  "ruff",
+  "mypy",
+  "pandas-stubs",
+  "types-requests",
+  "grimp>=3.10",
+]
+colab = [
+  "numpy<2.2",
+  "pandas==2.2.2",
+]
+docs = [
+  "mkdocs>=1.6",
+  "mkdocs-material>=9.5",
+  "mkdocstrings[python]>=0.25",
+  "mkdocs-gen-files>=0.5",
+  "mkdocs-literate-nav>=0.6",
+  "mkdocs-section-index>=0.3",
+  "pymdown-extensions>=10.8",
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+# (Optional) If your top-level package is "util", you can narrow discovery:
+# include = ["util*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q --maxfail=1 --disable-warnings"
+
+[tool.coverage.run]
+source = ["src"]
+branch = true
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = true
