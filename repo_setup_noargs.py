@@ -1,10 +1,14 @@
 import os
 import sys
+import subprocess
 from importlib.metadata import version as dist_version, PackageNotFoundError
 
 def get_secret(secret_name: str) -> str:
     from google.colab import userdata
-    return userdata.get(secret_name)
+    try:
+        return userdata.get(secret_name)
+    except Exception:
+        return None
 
 def installed_dist_version(dist_name: str) -> str:
     try:
@@ -18,30 +22,50 @@ def install(
     force_install: bool = False,
     dist_name: str = "javhar",
 ) -> None:
-    print(f"dist version  : {installed_dist_version(dist_name)}")
-    print(f"target version: {target_version}")
-    print(f"force install?  {force_install}")
+    current_version = installed_dist_version(dist_name)
+    print(f"Current dist version : {current_version}")
+    print(f"Target version       : {target_version}")
+    print(f"Force install?       : {force_install}")
     
     if github_pat is None:
-        print("No action taken: No GitHub PAT supplied.")
+        print("ABORT: No GitHub PAT supplied. Check your Colab Secrets (Key icon).")
         return
 
-    if installed_dist_version(dist_name) == target_version and not force_install:
-        print("Nothing to do.")
+    if current_version == target_version and not force_install:
+        print("Success: Version matches target. Nothing to do.")
         return
 
     url = f"git+https://x-access-token:{github_pat}@github.com/javhar-hex/hex.git@main"
-    install_command = (
-        f"pip install -q "
-        f"--no-cache-dir "
-        f"--upgrade-strategy only-if-needed "
-        f"\"javhar[colab] @ {url}\""
-    )
-    print(f"Executing: {install_command}")
-    os.system(install_command)
     
-    import importlib; importlib.invalidate_caches()
-    print(f"dist version now: {installed_dist_version(dist_name)}")
+    install_command = [
+        sys.executable, "-m", "pip", "install", "-q",
+        "--no-cache-dir",
+        "--upgrade-strategy", "only-if-needed",
+        f"{dist_name}[colab] @ {url}"
+    ]
+    
+    print(f"Executing pip install for {dist_name}...")
+    
+    try:
+        result = subprocess.run(
+            install_command, 
+            capture_output=True, 
+            text=True
+        )
+        
+        if result.returncode != 0:
+            print("\n--- PIP INSTALL ERROR ---")
+            print(result.stderr)
+            print("--- END ERROR ---\n")
+            print("Troubleshooting: Ensure your Fine-grained PAT has 'Contents: Read' and 'Metadata: Read' permissions.")
+        else:
+            import importlib
+            importlib.invalidate_caches()
+            new_version = installed_dist_version(dist_name)
+            print(f"Installation successful. Dist version now: {new_version}")
+
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
-    print("repo_setup_noargs.py main")
+    print("repo_setup_noargs.py initialized.")
